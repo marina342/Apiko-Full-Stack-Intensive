@@ -27,11 +27,14 @@ function getParameterByName(name, url) {
 let articleID = getParameterByName("postId");
 let userID=getParameterByName("userId");
 
-const gettingComments=(id)=>{
+const gettingComments=(id, data)=>{
     request("https://jsonplaceholder.typicode.com/posts/"+id+"/comments")
         .then((result)=>{
             document.body.innerHTML="";
-            JSON.parse(result).map((item, index)=>document.body.innerHTML+="<ul><h2>Comment №"+parseInt(index+1)+"</h2><li><h4>heading:</h4>"+item.name+"</li><li><h4>user:</h4>"+item.email+"</li><li><h4>comment:</h4>"+item.body+"</li></ul>");
+            let div=document.createElement("div");
+            div.innerHTML+="<div><h1>"+data.title+"</h1><p>"+data.body+"</p></div>";
+            document.body.appendChild(div);
+            JSON.parse(result).map((item, index)=>div.innerHTML+="<ul><h2>Comment №"+parseInt(index+1)+"</h2><li><h4>heading:</h4>"+item.name+"</li><li><h4>user:</h4>"+item.email+"</li><li><h4>comment:</h4>"+item.body+"</li></ul>");
         })
         .catch(()=>console.log("error"))};
 
@@ -46,7 +49,7 @@ const gettingArticles=()=>{
                     title:element.dataset.title,
                     body:element.dataset.body
                 };
-                gettingComments(element.dataset.id);
+                gettingComments(element.dataset.id, data);
             }))
         .catch(()=>console.log("error"));
 
